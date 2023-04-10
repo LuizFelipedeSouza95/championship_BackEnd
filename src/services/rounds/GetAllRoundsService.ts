@@ -6,4 +6,5 @@ class GetAllRoundsService {
     return rounds;
   }
 }
+
 export { GetAllRoundsService };
