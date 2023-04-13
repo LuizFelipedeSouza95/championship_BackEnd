@@ -5,10 +5,11 @@ interface UserRequest {
   name: string;
   email: string;
   password: string;
+  teamName: string;
 }
 
 class CreateUserService {
-  async execute({ name, email, password }: UserRequest) {
+  async execute({ name, email, password, teamName }: UserRequest) {
     if (!email) {
       throw new Error("email incorrect");
     }
@@ -30,6 +31,7 @@ class CreateUserService {
         name,
         email,
         password: passwordHash,
+        teamName,
       },
       select: {
         id: true,

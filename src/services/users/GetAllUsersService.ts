@@ -7,6 +7,7 @@ class GetAllUsersService {
         id: true,
         name: true,
         email: true,
+        teamName: true,
         classifications: true,
         roundsHome: true,
         roundVisiting: true,

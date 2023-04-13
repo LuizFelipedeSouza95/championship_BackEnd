@@ -17,6 +17,7 @@ import { UpdateClassificationController } from "./controllers/classifications/Up
 
 import { CreateTeamController } from "./controllers/teams/CreateTeamController";
 import { GetAllTeamsController } from "./controllers/teams/GetAllTeamsController";
+import { GetOneTeamsController } from "./controllers/teams/GetOneTeamsController";
 
 const router = Router();
 
@@ -40,5 +41,6 @@ router.put('/classification', new UpdateClassificationController().handle);
 //-- ROTAS TEAMS --
 router.post('/teams', new CreateTeamController().handle);
 router.get('/teams', new GetAllTeamsController().handle);
+router.get('/team', new GetOneTeamsController().handle);
 
 export { router };
