@@ -6,7 +6,11 @@ class GetAllTeamsController {
     const sendTeams = new GetAllTeamsService();
     const teams = await sendTeams.execute();
 
-    return res.json(teams);
+    if (!teams) {
+      res.status(204).json();
+    }
+
+    return res.status(200).json(teams);
   }
 }
 

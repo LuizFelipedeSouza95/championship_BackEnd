@@ -10,7 +10,7 @@ class CreateTeamsService {
       skipDuplicates: true,
     });
 
-    return "Teams Created";
+    return createdTeams;
   }
 }
 

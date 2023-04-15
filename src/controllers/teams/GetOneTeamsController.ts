@@ -3,13 +3,22 @@ import { GetOneTeamsService } from "../../services/teams/GetOneTeamsService";
 
 class GetOneTeamsController {
   async handle(req: Request, res: Response) {
-    const team = req.query.team as string;
+    const teamName = req.query.team as string;
+
+    if (!teamName) {
+      return res.status(400).json({ error: "Missing mandatory data" });
+    }
+
     const sendTeams = new GetOneTeamsService();
-    const teams = await sendTeams.execute({
-      team
+    const team = await sendTeams.execute({
+      teamName,
     });
 
-    return res.json(teams);
+    if (!team) {
+      res.status(204).json();
+    }
+
+    return res.status(200).json(team);
   }
 }
 

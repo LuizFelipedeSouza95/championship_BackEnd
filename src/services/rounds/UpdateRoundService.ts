@@ -5,7 +5,6 @@ interface RoundRequest {
   homePlayer: string;
   scoreHome: number;
   scoreVisiting: number;
-  disabledInputs: boolean;
 }
 
 class UpdateRoundService {
@@ -14,7 +13,6 @@ class UpdateRoundService {
     homePlayer,
     scoreHome,
     scoreVisiting,
-    disabledInputs,
   }: RoundRequest) {
     const game = await prismaClient.round.findMany({
       where: { roundNumber: roundNumber },
@@ -31,7 +29,6 @@ class UpdateRoundService {
       data: {
         scoreHome,
         scoreVisiting,
-        disabledInputs,
       },
       select: {
         id: true,

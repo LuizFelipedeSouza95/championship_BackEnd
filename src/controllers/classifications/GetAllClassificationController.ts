@@ -6,7 +6,11 @@ class GetAllClassificationController {
     const sendClassification = new GetAllClassificationService();
     const classifications = await sendClassification.execute();
 
-    return res.json(classifications);
+    if (!classifications) {
+      res.status(204).json();
+    }
+
+    return res.status(200).json(classifications);
   }
 }
 

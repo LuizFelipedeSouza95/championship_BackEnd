@@ -1,14 +1,14 @@
 import prismaClient from "../../prisma";
 
-interface UserRequest{
+interface UserRequest {
   email: string;
 }
 
 class GetOneUsersService {
-  async execute({email}: UserRequest) {
+  async execute({ email }: UserRequest) {
     const users = await prismaClient.user.findFirst({
-      where:{
-        email
+      where: {
+        email,
       },
       select: {
         id: true,

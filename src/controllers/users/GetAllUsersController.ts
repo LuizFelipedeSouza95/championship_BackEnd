@@ -6,7 +6,11 @@ class GetAllUsersController {
     const sendUsers = new GetAllUsersService();
     const users = await sendUsers.execute();
 
-    return res.json(users);
+    if (!users) {
+      res.status(204).json();
+    }
+
+    return res.status(200).json(users);
   }
 }
 

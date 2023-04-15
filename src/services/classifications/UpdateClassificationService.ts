@@ -24,25 +24,13 @@ class UpdateClassificationService {
       where: { namePlayer: namePlayer2 },
     });
 
-    const getNameTeam1 = await prismaClient.team.findFirst({
-      where: {
-        id: team1 ? team1.team_id : null, // verificação para evitar erro quando team1 é nulo
-      },
-    });
-
-    const getNameTeam2 = await prismaClient.team.findFirst({
-      where: {
-        id: team2 ? team2.team_id : null, // verificação para evitar erro quando team2 é nulo
-      },
-    });
-
-    // Atualiza os valores para o time 1
     if (team1) {
       // verificação para evitar erro quando team1 é nulo
       team1.GP += scorePlayer1;
       team1.GC += scorePlayer2;
       team1.SG = team1.GP - team1.GC;
       team1.J += 1;
+
       if (scorePlayer1 > scorePlayer2) {
         team1.P += 3;
         team1.V += 1;
@@ -72,8 +60,6 @@ class UpdateClassificationService {
       updatedTeam1 = await prismaClient.classification.update({
         where: { id: team1.id },
         data: {
-          team_name: getNameTeam1.name,
-          namePlayer: team1.namePlayer,
           P: team1.P,
           V: team1.V,
           E: team1.E,
@@ -82,7 +68,6 @@ class UpdateClassificationService {
           GP: team1.GP,
           GC: team1.GC,
           SG: team1.SG,
-          player_id: team1.player_id,
         },
       });
     }
@@ -124,8 +109,6 @@ class UpdateClassificationService {
       updatedTeam2 = await prismaClient.classification.update({
         where: { id: team2.id },
         data: {
-          team_name: getNameTeam2.name,
-          namePlayer: team2.namePlayer,
           P: team2.P,
           V: team2.V,
           E: team2.E,
@@ -134,7 +117,6 @@ class UpdateClassificationService {
           GP: team2.GP,
           GC: team2.GC,
           SG: team2.SG,
-          player_id: team2.player_id,
         },
       });
     }

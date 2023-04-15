@@ -3,10 +3,14 @@ import { GetAllRoundsService } from "../../services/rounds/GetAllRoundsService";
 
 class GetAllRoundsController {
   async handle(req: Request, res: Response) {
-    const sendOrder = new GetAllRoundsService();
-    const order = await sendOrder.execute();
+    const sendRounds = new GetAllRoundsService();
+    const rounds = await sendRounds.execute();
 
-    return res.json(order);
+    if (!rounds) {
+      res.status(204).json();
+    }
+
+    return res.status(200).json(rounds);
   }
 }
 

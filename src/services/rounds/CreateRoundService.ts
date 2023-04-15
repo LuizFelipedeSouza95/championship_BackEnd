@@ -1,50 +1,57 @@
 import prismaClient from "../../prisma/index";
-
-interface RoundRequest {
-  roundNumber: number;
-  homePlayer: string;
-  homePlayer_id: string;
-  scoreHome: number;
-  scoreVisiting: number;
-  visitingPlayers: string;
-  visitingPlayers_id: string;
-  disabledInputs: boolean;
-}
-
+import { createRoundByUsers } from "../../utils/generateRoudeds";
 class CreateRoundService {
-  async execute({
-    roundNumber,
-    homePlayer,
-    homePlayer_id,
-    scoreHome,
-    scoreVisiting,
-    visitingPlayers,
-    visitingPlayers_id,
-    disabledInputs,
-  }: RoundRequest) {
-    const rounds = await prismaClient.round.create({
-      data: {
-        roundNumber,
-        homePlayer,
-        homePlayer_id,
-        scoreHome,
-        scoreVisiting,
-        visitingPlayers,
-        visitingPlayers_id,
-        disabledInputs,
-      },
-      select: {
-        id: true,
-        roundNumber: true,
-        homePlayer: true,
-        scoreHome: true,
-        visitingPlayers: true,
-        scoreVisiting: true,
-        disabledInputs: true,
-      },
-    });
+  async execute() {
+    const Users = await prismaClient.user.findMany();
 
-    return rounds;
+    const playersName: string[] = Users.map((obj) => obj.name);
+    const roundeds = createRoundByUsers(playersName);
+    const roundsData = [];
+
+    for (const round in roundeds) {
+      const jogos = roundeds[round];
+      const numeroround = round.match(/\d+/)[0];
+
+      for (let i = 0; i < jogos.length; i++) {
+        const jogo = jogos[i];
+
+        const gethomePlayerId = await prismaClient.user.findFirst({
+          where: { name: jogo.casa },
+        });
+        const homePlayerId = gethomePlayerId?.id ?? null;
+
+        const getvisitPlayerId = await prismaClient.user.findFirst({
+          where: { name: jogo.fora },
+        });
+        const visitPlayerId = getvisitPlayerId?.id ?? null;
+
+        const roundData = await prismaClient.round.create({
+          data: {
+            roundNumber: parseInt(numeroround),
+            homePlayer: jogo.casa,
+            homePlayer_id: homePlayerId,
+            scoreHome: 0,
+            scoreVisiting: 0,
+            visitingPlayers: jogo.fora,
+            visitingPlayers_id: visitPlayerId,
+            disabledInputs: false,
+          },
+          select: {
+            id: true,
+            roundNumber: true,
+            homePlayer: true,
+            scoreHome: true,
+            visitingPlayers: true,
+            scoreVisiting: true,
+            disabledInputs: true,
+          },
+        });
+
+        roundsData.push(roundData);
+      }
+    }
+
+    return roundsData;
   }
 }
 

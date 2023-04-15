@@ -1,23 +1,17 @@
 import prismaClient from "../../prisma";
 
-interface TeamProps{
-  team: string;
+interface TeamProps {
+  teamName: string;
 }
 class GetOneTeamsService {
-  async execute({ team }: TeamProps) {
-    //const nomeBusca = "joão";
-    console.log(team
+  async execute({ teamName }: TeamProps) {
+    let team = teamName
       .toLowerCase()
-      .replace(/\b(\w)/g, (match) => match.toUpperCase()));
-    
+      .replace(/\b(\w)/g, (match) => match.toUpperCase());
+
     const teams = await prismaClient.team.findMany({
       where: {
-        name: team
-/*         name: {
-          equals: team
-          .toLowerCase()
-          .replace(/\b(\w)/g, (match) => match.toUpperCase()),
-        }, */
+        name: team,
       },
     });
 
